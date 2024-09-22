@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Shops</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h2 class="text-center my-4">All Shops</h2>
+
+      <!-- Search Bar -->
+      <div class="col-md-12 mb-4">
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="form-control" 
+          placeholder="Search by shop name or phone number..." 
+          onkeyup="filterShops()"
+        />
+      </div>
+
+      <!-- Shops List -->
+      <% users.forEach(function(user) { %>
+        <div class="col-md-4 shop-card" data-name="<%= user.userName %>" data-phone="<%= user.phoneNo %>">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title"><%= user.userName %></h5>
+              <p class="card-text"><%= user.userAddress %></p>
+              <p class="card-text"><%= user.phoneNo %></p>
+              <input type="hidden" name="phoneNo" value="<%= user.phoneNo %>">
+              <input type="hidden" name="password" value="<%= user.password %>">
+              <a href="/auth/login?phoneNo=<%= user.phoneNo %>&password=<%= user.password %>" class="btn btn-primary">
+                Go to Shop
+              </a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+
+    </div>
+  </div>
+
+  <!-- JavaScript to Filter Shops -->
+  <script>
+    function filterShops() {
+      // Get the search query and convert to lowercase
+      const query = document.getElementById("searchInput").value.toLowerCase();
+
+      // Get all shop cards
+      const shopCards = document.querySelectorAll(".shop-card");
+
+      // Loop through each shop card and toggle visibility based on search
+      shopCards.forEach(card => {
+        const shopName = card.getAttribute("data-name").toLowerCase();
+        const phoneNo = card.getAttribute("data-phone").toLowerCase();
+
+        // Check if the search query starts with the shop name or phone number
+        if (shopName.startsWith(query) || phoneNo.startsWith(query)) {
+          card.style.display = "block"; // Show the card if it matches the search query
+        } else {
+          card.style.display = "none"; // Hide the card if it doesn't match
+        }
+      });
+    }
+  </script>
+</body>
+</html>
